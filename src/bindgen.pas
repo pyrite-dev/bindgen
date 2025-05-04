@@ -7,7 +7,6 @@ uses
 procedure Recursive(Path : String);
 var
 	Info : TSearchRec;
-	BGResult : Integer;
 begin
 	if DirectoryExists(Path) then
 	begin
@@ -25,15 +24,8 @@ begin
 	else if FileExists(Path) then
 	begin
 		Write(Path + '... ');
-		BGResult := BindgenPreprocess(Path);
-		if not(BGResult = 0) then
-		begin
-			WriteLn('Failed');
-		end
-		else
-		begin
-			Writeln('OK');
-		end;
+		BindgenPreprocess(Path);
+		WriteLn('');
 	end;
 end;
 
@@ -41,6 +33,7 @@ var
 	I : Integer;
 begin
 	WriteLn('GoldFish Lua binding generator');
+	SetLength(CFiles, 0);
 	for I := 1 to ParamCount do
 	begin
 		Recursive(ParamStr(I));
