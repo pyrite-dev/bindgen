@@ -23,7 +23,8 @@ implementation
 uses
 	RegExpr,
 	Strutils,
-	Sysutils;
+	Sysutils,
+	Classes;
 
 procedure BindgenPreprocess(Path : String);
 var
@@ -31,10 +32,12 @@ var
 	F : Text;
 	I : Integer;
 	RE : TRegExpr;
+	SRE : TRegExpr;
 	REStr : String;
 	FunctionCount : Integer;
 	Bracket : Integer;
 	Count : Integer;
+	Strings : TStringList;
 const
 	LEGAL : String = '[a-zA-Z_]';
 begin
@@ -61,6 +64,7 @@ begin
 	(* End of Line *)
 	REStr := REStr + '[ \t]*(;|\{)[ \t]*(.*)$';
 
+	SRE := TRegExpr.Create('[ \t]*,[ \t]*');
 	RE := TRegExpr.Create(REStr);
 	AssignFile(F, Path);
 	Reset(F);
@@ -107,10 +111,18 @@ begin
 			SetLength(CFiles[Length(CFiles) - 1].FunctionArray, FunctionCount);
 			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ReturnType := RE.Match[1];
 			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].FunctionName := RE.Match[2];
+
+			Strings := TStringList.Create();
+			SRE.Split(RE.Match[3], Strings);
+			for I := 0 to (Strings.Count - 1) do
+			begin
+			end;
+			Strings.Free();
 		end;
 	end;
 	CloseFile(F);
 	RE.Free();
+	SRE.Free();
 
 	Write(IntToStr(FunctionCount) + ' functions');
 end;
