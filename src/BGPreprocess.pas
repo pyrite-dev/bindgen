@@ -15,13 +15,14 @@ type
 	TCFile = record
 		FileName : String;
 		FunctionArray : TCFunctionArray;
+		Root : String;
 	end;
 	TCFileArray = Array of TCFile;
 
 var
 	CFiles : TCFileArray;
 
-procedure BindgenPreprocess(Path : String);
+procedure BindgenPreprocess(Root : String; Path : String);
 
 implementation
 uses
@@ -30,7 +31,7 @@ uses
 	Sysutils,
 	Classes;
 
-procedure BindgenPreprocess(Path : String);
+procedure BindgenPreprocess(Root : String; Path : String);
 var
 	S : String;
 	F : Text;
@@ -53,6 +54,7 @@ begin
 
 	SetLength(CFiles, Length(CFiles) + 1);
 	CFiles[Length(CFiles) - 1].FileName := Path;
+	CFiles[Length(CFiles) - 1].Root := Root;
 	SetLength(CFiles[Length(CFiles) - 1].FunctionArray, 0);
 
 	(* Return type, Group 1 *)

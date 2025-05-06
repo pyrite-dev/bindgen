@@ -5,7 +5,7 @@ uses
 	BGPreprocess,
 	BGConfig;
 
-procedure Recursive(Path : String);
+procedure Recursive(Root : String; Path : String);
 var
 	Info : TSearchRec;
 begin
@@ -16,7 +16,7 @@ begin
 			repeat
 				if not ((Info.Name = '.') or (Info.Name = '..')) then
 				begin
-					Recursive(Path + '/' + Info.Name);
+					Recursive(Root, Path + '/' + Info.Name);
 				end;
 			until FindNext(Info) <> 0;
 			FindClose(Info);
@@ -25,7 +25,7 @@ begin
 	else if FileExists(Path) then
 	begin
 		Write(Path + '... ');
-		BindgenPreprocess(Path);
+		BindgenPreprocess(Root, Path);
 		WriteLn('');
 	end;
 end;
@@ -57,7 +57,7 @@ begin
 		end
 		else
 		begin
-			Recursive(ParamStr(I));
+			Recursive(ParamStr(I), ParamStr(I));
 		end;
 		I := I + 1;
 	end;
