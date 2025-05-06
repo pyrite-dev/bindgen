@@ -3,7 +3,8 @@ program bindgen;
 uses
 	Sysutils,
 	BGPreprocess,
-	BGConfig;
+	BGConfig,
+	BGVersion;
 
 procedure Recursive(Root : String; Path : String);
 var
@@ -24,9 +25,7 @@ begin
 	end
 	else if FileExists(Path) then
 	begin
-		Write(Path + '... ');
 		BindgenPreprocess(Root, Path);
-		WriteLn('');
 	end;
 end;
 
@@ -36,9 +35,10 @@ var
 begin
 	Config := 'bindgen.xml';
 
-	WriteLn('GoldFish Lua binding generator');
+	WriteLn('GoldFish Lua binding generator ' + BindgenVersion);
 	SetLength(CFiles, 0);
 
+	WriteLn('** Phase 1 - Preprocess files');
 	I := 1;
 	while I <= ParamCount do
 	begin
@@ -61,9 +61,17 @@ begin
 		end;
 		I := I + 1;
 	end;
+
+	WriteLn('** Phase 2 - Read config');
 	if FileExists(config) then
 	begin
-		WriteLn('Using config: ' + Config);
 		BindgenConfig(Config);
+	end
+	else
+	begin
+		WriteLn('Config not found');
+		Halt(1);
 	end;
+
+	WriteLn('** Phase 3 - Generate C source/header');
 end.

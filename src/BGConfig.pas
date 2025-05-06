@@ -6,6 +6,7 @@ uses
 
 var
 	Config : TXMLDocument;
+	Pre : String;
 
 procedure BindgenConfig(Path : String);
 
@@ -18,6 +19,11 @@ procedure BindgenConfigNode(Node : TDOMNode);
 var
 	Child : TDOMNode;
 begin
+	if Node.NodeName = 'Pre' then
+	begin
+		Pre := Node.NodeValue;
+		Exit;
+	end;
 	Child := Node.FirstChild;
 	while Assigned(Child) do
 	begin

@@ -142,8 +142,6 @@ begin
 	CloseFile(F);
 	RE.Free();
 	SRE.Free();
-
-	Write(IntToStr(FunctionCount) + ' functions');
 end;
 
 end.
