@@ -2,7 +2,8 @@ program bindgen;
 
 uses
 	Sysutils,
-	BGPreprocess;
+	BGPreprocess,
+	BGConfig;
 
 procedure Recursive(Path : String);
 var
@@ -31,11 +32,38 @@ end;
 
 var
 	I : Integer;
+	Config : String;
 begin
+	Config := 'bindgen.xml';
+
 	WriteLn('GoldFish Lua binding generator');
 	SetLength(CFiles, 0);
-	for I := 1 to ParamCount do
+
+	I := 1;
+	while I <= ParamCount do
 	begin
-		Recursive(ParamStr(I));
+		if (Length(ParamStr(I)) > 0) and (ParamStr(I)[1] = '-') then
+		begin
+			if (ParamStr(I) = '-C') or (ParamStr(I) = '--config') then
+			begin
+				I := I + 1;
+				Config := ParamStr(I);
+			end
+			else
+			begin
+				WriteLn('Bad flag: ' + ParamStr(I));
+				Halt(1);
+			end;
+		end
+		else
+		begin
+			Recursive(ParamStr(I));
+		end;
+		I := I + 1;
+	end;
+	if FileExists(config) then
+	begin
+		WriteLn('Using config: ' + Config);
+		BindgenConfig(Config);
 	end;
 end.

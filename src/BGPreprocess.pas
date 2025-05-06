@@ -115,7 +115,7 @@ begin
 			FunctionCount := FunctionCount + 1;
 			SetLength(CFiles[Length(CFiles) - 1].FunctionArray, FunctionCount);
 			SetLength(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument, 0);
-			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ReturnType := RE.Match[1];
+			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ReturnType := StringReplace(RE.Match[1], ' ', '', [rfReplaceAll]);
 			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].FunctionName := RE.Match[2];
 
 			Strings := TStringList.Create();
@@ -130,7 +130,7 @@ begin
 				FRE.Exec(Strings[I]);
 
 				SetLength(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument, Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument) + 1);
-				CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument[Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument) - 1] := FRE.Match[0];
+				CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument[Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument) - 1] := StringReplace(FRE.Match[0], ' ', '', [rfReplaceAll]);
 
 				FRE.Free();
 			end;
