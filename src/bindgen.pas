@@ -36,6 +36,7 @@ var
 	Config : String;
 begin
 	Config := 'bindgen.xml';
+	OutputRoot := '.';
 
 	WriteLn('GoldFish Lua binding generator ' + BindgenVersion);
 	BindgenInit();
@@ -50,6 +51,11 @@ begin
 			begin
 				I := I + 1;
 				Config := ParamStr(I);
+			end
+			else if (ParamStr(I) = '-O') or (ParamStr(I) = '--output') then
+			begin
+				I := I + 1;
+				OutputRoot := ParamStr(I);
 			end
 			else
 			begin

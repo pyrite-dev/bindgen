@@ -11,7 +11,7 @@ var
 	LuaRoot : String;
 	LuaWrap : String;
 	LuaState : String;
-	Metatable : TBindgenMap;
+	OutputRoot : String;
 
 procedure BindgenConfig(Path : String);
 
@@ -23,10 +23,6 @@ procedure BindgenConfigNode(Node : TDOMNode);
 var
 	Child : TDOMNode;
 begin
-	if Node.NodeName = 'Metatable' then
-	begin 
-		BindgenMapSet(@Metatable, TDOMElement(Node).GetAttribute('C'), TDOMElement(Node).GetAttribute('Lua'));
-	end;
 	Child := Node.FirstChild;
 	while Assigned(Child) do
 	begin

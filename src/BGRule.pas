@@ -55,6 +55,7 @@ var
 	ArgIndex : Integer;
 	ArgType : String;
 	I : Integer;
+	RE : TRegExpr;
 begin
 	BindgenMatch := True;
 	Child := Node.FirstChild;
@@ -107,6 +108,12 @@ begin
 		begin
 			ArgType := TDOMElement(Child).GetAttribute('Type');
 			BindgenMatch := Entry^.ReturnType = ArgType;
+		end
+		else if Child.NodeName = 'Name' then
+		begin
+			RE := TRegExpr.Create(TDOMElement(Child).GetAttribute('Pattern'));
+			BindgenMatch := RE.Exec(Entry^.FunctionName);
+			RE.Free();
 		end
 		else if Child.NodeName = 'Not' then
 		begin

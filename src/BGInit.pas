@@ -11,7 +11,6 @@ uses
 procedure BindgenInit();
 begin
 	SetLength(CFiles, 0);
-	SetLength(Metatable, 0);
 end;
 
 end.
