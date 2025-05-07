@@ -4,7 +4,9 @@ uses
 	Sysutils,
 	BGPreprocess,
 	BGConfig,
-	BGVersion;
+	BGVersion,
+	BGGenerate,
+	BGInit;
 
 procedure Recursive(Root : String; Path : String);
 var
@@ -36,7 +38,7 @@ begin
 	Config := 'bindgen.xml';
 
 	WriteLn('GoldFish Lua binding generator ' + BindgenVersion);
-	SetLength(CFiles, 0);
+	BindgenInit();
 
 	WriteLn('** Phase 1 - Preprocess files');
 	I := 1;
@@ -74,4 +76,5 @@ begin
 	end;
 
 	WriteLn('** Phase 3 - Generate C source/header');
+	BindgenGenerate();
 end.

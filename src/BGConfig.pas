@@ -4,25 +4,31 @@ interface
 uses
 	DOM;
 
+type
+	TBindgenEntry = record
+		Key : String;
+		Value : String;
+	end;
+	TBindgenMap = Array of TBindgenEntry;
+
 var
 	Config : TXMLDocument;
 	Pre : String;
+	Metatable : TBindgenMap;
 
 procedure BindgenConfig(Path : String);
 
 implementation
 uses
-	XMLRead,
-	BGPreprocess;
+	XMLRead;
 
 procedure BindgenConfigNode(Node : TDOMNode);
 var
 	Child : TDOMNode;
 begin
-	if Node.NodeName = 'Pre' then
-	begin
-		Pre := Node.NodeValue;
-		Exit;
+	if Node.NodeName = 'Metatable' then
+	begin 
+		
 	end;
 	Child := Node.FirstChild;
 	while Assigned(Child) do
@@ -39,7 +45,14 @@ begin
 	Child := Config.DocumentElement.FirstChild;
 	while Assigned(Child) do
 	begin
-		BindgenConfigNode(Child);
+		if Child.NodeName = 'Pre' then
+		begin
+			Pre := Child.NodeValue;
+		end
+		else
+		begin
+			BindgenConfigNode(Child);
+		end;
 		Child := Child.NextSibling;
 	end;
 end;
