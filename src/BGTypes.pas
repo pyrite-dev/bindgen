@@ -10,6 +10,7 @@ type
 		FunctionName : String;
 		LuaName : String;
 		Argument : TCArgumentArray;
+		ArgumentUse : TCArgumentArray;
 	end;
 	TCFunctionArray = Array of TCFunction;
 	PTCFunction = ^TCFunction;

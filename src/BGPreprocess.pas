@@ -105,6 +105,7 @@ begin
 			FunctionCount := FunctionCount + 1;
 			SetLength(CFiles[Length(CFiles) - 1].FunctionArray, FunctionCount);
 			SetLength(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument, 0);
+			SetLength(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ArgumentUse, 0);
 			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ReturnType := Trim(PRE.Replace(RE.Match[1], '*'));
 			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].FunctionName := RE.Match[2];
 
@@ -121,6 +122,9 @@ begin
 
 				SetLength(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument, Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument) + 1);
 				CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument[Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument) - 1] := Trim(PRE.Replace(FRE.Match[0], '*'));
+
+				SetLength(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ArgumentUse, Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ArgumentUse) + 1);
+				CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ArgumentUse[Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ArgumentUse) - 1] := '';
 
 				FRE.Free();
 			end;

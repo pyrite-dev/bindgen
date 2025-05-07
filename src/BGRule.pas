@@ -58,6 +58,15 @@ var
 begin
 	BindgenMatch := True;
 	Child := Node.FirstChild;
+
+	if Node.NodeName = 'Match' then
+	begin
+		for I := 0 to (Length(Entry^.Argument) - 1) do
+		begin
+			Entry^.ArgumentUse[I] := '';
+		end;
+	end;
+
 	while Assigned(Child) do
 	begin
 		if Child.NodeName = 'Argument' then
@@ -70,6 +79,7 @@ begin
 				begin
 					if Entry^.Argument[I] = ArgType then
 					begin
+						Entry^.ArgumentUse[I] := TDOMElement(Child).GetAttribute('Use');
 						BindgenMatch := True;
 						break;
 					end;
@@ -86,6 +96,10 @@ begin
 				if BindgenMatch and not(Entry^.Argument[ArgIndex] = ArgType) then
 				begin
 					BindgenMatch := False;
+				end;
+				if BindgenMatch then
+				begin
+					Entry^.ArgumentUse[ArgIndex] := TDOMElement(Child).GetAttribute('Use');
 				end;
 			end;
 		end

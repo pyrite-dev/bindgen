@@ -77,6 +77,9 @@ procedure BindgenGenerateFunction(Name : String; Entry : TCFunction);
 var
 	ArgStr : String;
 	I : Integer;
+	J : Integer;
+	PN : Integer;
+	LuaName : String;
 begin
 	ArgStr := '';
 
@@ -102,6 +105,36 @@ begin
 	WriteLn(BGFile, ' * C: ' + Entry.ReturnType + ' ' + Entry.FunctionName + ArgStr);
 	WriteLn(BGFile, ' */');
 	WriteLn(BGFile, 'int bindgen_' + Name + '(lua_State* s){');
+	PN := 0;
+	for I := 0 to (Length(Entry.Argument) - 1) do
+	begin
+		if Entry.ArgumentUse[I] = '' then
+		begin
+			LuaName := '';
+			for J := 0 to (Length(Metatable) - 1) do
+			begin
+				if Metatable[J].Key = Entry.Argument[I] then
+				begin
+					LuaName := Metatable[J].Value;
+					break;
+				end;
+			end;
+
+			if LuaName = '' then
+			begin
+				WriteLn(BGFile, '	' + Entry.Argument[I] + ' param' + IntToStr(I) + ';');
+			end
+			else
+			begin
+				WriteLn(BGFile, '	' + Entry.Argument[I] + '* param' + IntToStr(I) + ' = luaL_checkudata(s, ' + IntToStr(PN + 1) + ', "' + LuaName + '");');
+			end;
+			PN := PN + 1;
+		end
+		else
+		begin
+			WriteLn(BGFile, '	' + Entry.Argument[I] + ' param' + IntToStr(I) + ';');
+		end;
+	end;
 	WriteLn(BGFile, '	return 0;');
 	WriteLn(BGFile, '}');
 	WriteLn(BGFile, '');
