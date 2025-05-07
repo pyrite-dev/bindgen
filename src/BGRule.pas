@@ -18,6 +18,7 @@ var
 	Child : TDOMNode;
 	RE : TRegExpr;
 	REStr : String;
+	I : Integer;
 begin
 	BindgenRule := False;
 	Child := Node.FirstChild;
@@ -37,7 +38,7 @@ begin
 
 				RE := TRegExpr.Create(REStr);
 				RE.Exec(Entry^.FunctionName);
-				Entry^.LuaName := RE.Match[1];
+				Entry^.LuaName := RE.Match[1] + RE.Match[2];
 				RE.Free;
 			end;
 		end;
