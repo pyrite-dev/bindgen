@@ -1,23 +1,8 @@
 unit BGPreprocess;
 
 interface
-type
-	TCArgument = String;
-	TCArgumentArray = Array of TCArgument;
-
-	TCFunction = record
-		ReturnType : String;
-		FunctionName : String;
-		Argument : TCArgumentArray;
-	end;
-	TCFunctionArray = Array of TCFunction;
-
-	TCFile = record
-		FileName : String;
-		FunctionArray : TCFunctionArray;
-		Root : String;
-	end;
-	TCFileArray = Array of TCFile;
+uses
+	BGTypes;
 
 var
 	CFiles : TCFileArray;
@@ -38,6 +23,7 @@ var
 	I : Integer;
 	RE : TRegExpr;
 	SRE : TRegExpr;
+	PRE : TRegExpr;
 	FRE : TRegExpr;
 	REStr : String;
 	FunctionCount : Integer;
@@ -53,6 +39,7 @@ begin
 	Bracket := 0;
 
 	SetLength(CFiles, Length(CFiles) + 1);
+	CFiles[Length(CFiles) - 1].IncludePath := Copy(Path, Length(Root) + 2, Length(Path) - Length(Root) - 1);
 	CFiles[Length(CFiles) - 1].FileName := Path;
 	CFiles[Length(CFiles) - 1].Root := Root;
 	SetLength(CFiles[Length(CFiles) - 1].FunctionArray, 0);
@@ -71,6 +58,7 @@ begin
 	(* End of Line *)
 	REStr := REStr + '[ \t]*(;|\{)[ \t]*(.*)$';
 
+	PRE := TRegExpr.Create('[ \t]*\*[ \t]*');
 	SRE := TRegExpr.Create('[ \t]*,[ \t]*');
 	RE := TRegExpr.Create(REStr);
 	AssignFile(F, Path);
@@ -117,7 +105,7 @@ begin
 			FunctionCount := FunctionCount + 1;
 			SetLength(CFiles[Length(CFiles) - 1].FunctionArray, FunctionCount);
 			SetLength(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument, 0);
-			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ReturnType := StringReplace(RE.Match[1], ' ', '', [rfReplaceAll]);
+			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].ReturnType := Trim(PRE.Replace(RE.Match[1], '*'));
 			CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].FunctionName := RE.Match[2];
 
 			Strings := TStringList.Create();
@@ -132,7 +120,7 @@ begin
 				FRE.Exec(Strings[I]);
 
 				SetLength(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument, Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument) + 1);
-				CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument[Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument) - 1] := StringReplace(FRE.Match[0], ' ', '', [rfReplaceAll]);
+				CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument[Length(CFiles[Length(CFiles) - 1].FunctionArray[FunctionCount - 1].Argument) - 1] := Trim(PRE.Replace(FRE.Match[0], '*'));
 
 				FRE.Free();
 			end;
@@ -142,6 +130,7 @@ begin
 	CloseFile(F);
 	RE.Free();
 	SRE.Free();
+	PRE.Free();
 end;
 
 end.

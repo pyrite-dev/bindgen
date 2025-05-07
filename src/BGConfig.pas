@@ -2,18 +2,15 @@ unit BGConfig;
 
 interface
 uses
-	DOM;
-
-type
-	TBindgenEntry = record
-		Key : String;
-		Value : String;
-	end;
-	TBindgenMap = Array of TBindgenEntry;
+	DOM,
+	BGTypes;
 
 var
 	Config : TXMLDocument;
 	Pre : String;
+	LuaRoot : String;
+	LuaWrap : String;
+	LuaState : String;
 	Metatable : TBindgenMap;
 
 procedure BindgenConfig(Path : String);
@@ -28,7 +25,7 @@ var
 begin
 	if Node.NodeName = 'Metatable' then
 	begin 
-		
+		BindgenMapSet(@Metatable, TDOMElement(Node).GetAttribute('C'), TDOMElement(Node).GetAttribute('Lua'));
 	end;
 	Child := Node.FirstChild;
 	while Assigned(Child) do
@@ -47,7 +44,19 @@ begin
 	begin
 		if Child.NodeName = 'Pre' then
 		begin
-			Pre := Child.NodeValue;
+			Pre := Child.TextContent;
+		end
+		else if Child.NodeName = 'LuaRoot' then
+		begin
+			LuaRoot := Child.TextContent;
+		end
+		else if Child.NodeName = 'LuaWrap' then
+		begin
+			LuaWrap := Child.TextContent;
+		end
+		else if Child.NodeName = 'LuaState' then
+		begin
+			LuaState := Child.TextContent;
 		end
 		else
 		begin
