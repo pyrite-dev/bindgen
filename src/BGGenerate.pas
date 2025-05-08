@@ -79,12 +79,22 @@ var
 	I : Integer;
 	J : Integer;
 	Child : TDOMNode;
+	Default : String;
+	Indent : String;
 begin
 	Child := Config.DocumentElement.FirstChild;
 	while Assigned(Child) do
 	begin
 		if (Child.NodeName = 'Array') and (TDOMElement(Child).GetAttribute('Name') = TypeName) then
 		begin
+			Default := TDOMElement(Child).GetAttribute('Default');
+			Indent := '';
+			if not(Default = '') then
+			begin
+				Indent := '	';
+				WriteLn(BGFile, '	if(lua_gettop(s) >= ' + IntToStr(ArgIndex) + '){');
+			end;
+
 			Child := Child.FirstChild;
 			J := 1;
 			while Assigned(Child) do
@@ -94,15 +104,23 @@ begin
 				begin
 					if TypeTable[I + 2] = Child.NodeName then
 					begin
-						WriteLn(BGFile, '	lua_rawgeti(s, ' + IntToStr(ArgIndex) + ', ' + IntToStr(J) + ');');
-						WriteLn(BGFile, '	' + VarName + '.' + TDOMElement(Child).GetAttribute('Field') + ' = luaL_check' + TypeTable[I + 1] + '(s, -1);');
-						WriteLn(BGFile, '	lua_pop(s, 1);');
+						WriteLn(BGFile, Indent + '	lua_rawgeti(s, ' + IntToStr(ArgIndex) + ', ' + IntToStr(J) + ');');
+						WriteLn(BGFile, Indent + '	' + VarName + '.' + TDOMElement(Child).GetAttribute('Field') + ' = luaL_check' + TypeTable[I + 1] + '(s, -1);');
+						WriteLn(BGFile, Indent + '	lua_pop(s, 1);');
 						break;
 					end;
 					I := I + 3;
 				end;
 				J := J + 1;
 				Child := Child.NextSibling;
+			end;
+
+			if not(Default = '') then
+			begin
+				Indent := '	';
+				WriteLn(BGFile, '	} else {');
+				WriteLn(BGFile, '		' + VarName + ' = ' + Default + ';');
+				WriteLn(BGFile, '	}');
 			end;
 			break;
 		end;
