@@ -578,6 +578,7 @@ begin
 	for I := 0 to (Length(Functions) - 1) do
 	begin
 		BindgenGenerateFunction((TDOMElement(Node).GetAttribute('Lua') + TDOMElement(Node).GetAttribute('Name')) + '_' + Functions[I].FunctionName, Functions[I]);
+		WriteLn(TDOMElement(Node).GetAttribute('Lua') + TDOMElement(Node).GetAttribute('Name') + '.' + Functions[I].LuaName);
 	end;
 end;
 

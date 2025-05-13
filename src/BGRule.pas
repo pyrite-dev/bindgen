@@ -38,7 +38,7 @@ begin
 
 				RE := TRegExpr.Create(REStr);
 				RE.Exec(Entry^.FunctionName);
-				Entry^.LuaName := RE.Match[1] + RE.Match[2];
+				Entry^.LuaName := RE.Match[1] + RE.Match[2] + RE.Match[3];
 				RE.Free;
 			end;
 		end;
