@@ -18,7 +18,6 @@ var
 	Child : TDOMNode;
 	RE : TRegExpr;
 	REStr : String;
-	I : Integer;
 begin
 	BindgenRule := False;
 	Child := Node.FirstChild;
@@ -29,7 +28,7 @@ begin
 			BindgenRule := BindgenMatch(Entry, Child);
 			if BindgenRule then
 			begin
-				REStr := TDOMElement(Child).GetAttribute('Name');
+				REStr := String(TDOMElement(Child).GetAttribute('Name'));
 
 				if REStr = '' then
 				begin
@@ -75,13 +74,13 @@ begin
 		begin
 			if TDOMElement(Child).GetAttribute('Index') = '' then
 			begin
-				ArgType := TDOMElement(Child).GetAttribute('Type');
+				ArgType := String(TDOMElement(Child).GetAttribute('Type'));
 				BindgenMatch := False;
 				for I := 0 to (Length(Entry^.Argument) - 1) do
 				begin
 					if Entry^.Argument[I] = ArgType then
 					begin
-						Entry^.ArgumentUse[I] := TDOMElement(Child).GetAttribute('Use');
+						Entry^.ArgumentUse[I] := String(TDOMElement(Child).GetAttribute('Use'));
 						BindgenMatch := True;
 						break;
 					end;
@@ -89,8 +88,8 @@ begin
 			end
 			else
 			begin
-				ArgIndex := StrToInt(TDOMElement(Child).GetAttribute('Index'));
-				ArgType := TDOMElement(Child).GetAttribute('Type');
+				ArgIndex := StrToInt(String(TDOMElement(Child).GetAttribute('Index')));
+				ArgType := String(TDOMElement(Child).GetAttribute('Type'));
 				if BindgenMatch and (ArgIndex >= Length(Entry^.Argument)) then
 				begin
 					BindgenMatch := False;
@@ -101,18 +100,18 @@ begin
 				end;
 				if BindgenMatch then
 				begin
-					Entry^.ArgumentUse[ArgIndex] := TDOMElement(Child).GetAttribute('Use');
+					Entry^.ArgumentUse[ArgIndex] := String(TDOMElement(Child).GetAttribute('Use'));
 				end;
 			end;
 		end
 		else if Child.NodeName = 'Return' then
 		begin
-			ArgType := TDOMElement(Child).GetAttribute('Type');
+			ArgType := String(TDOMElement(Child).GetAttribute('Type'));
 			BindgenMatch := Entry^.ReturnType = ArgType;
 		end
 		else if Child.NodeName = 'Name' then
 		begin
-			RE := TRegExpr.Create(TDOMElement(Child).GetAttribute('Pattern'));
+			RE := TRegExpr.Create(String(TDOMElement(Child).GetAttribute('Pattern')));
 			BindgenMatch := RE.Exec(Entry^.FunctionName);
 			RE.Free();
 		end

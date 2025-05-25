@@ -47,7 +47,7 @@ begin
 	Child := Config.DocumentElement.FirstChild;
 	while Assigned(Child) do
 	begin
-		if (Child.NodeName = 'Array') and (TDOMElement(Child).GetAttribute('Name') = TypeName) then
+		if (Child.NodeName = 'Array') and (String(TDOMElement(Child).GetAttribute('Name')) = TypeName) then
 		begin
 			Child := Child.FirstChild;
 			WriteLn(BGFile, '	lua_newtable(s);');
@@ -57,9 +57,9 @@ begin
 				I := 0;
 				while I < Length(TypeTable) do
 				begin
-					if TypeTable[I + 2] = Child.NodeName then
+					if TypeTable[I + 2] = String(Child.NodeName) then
 					begin
-						WriteLn(BGFile, '	lua_push' + TypeTable[I + 1] + '(s, ret.' + TDOMElement(Child).GetAttribute('Field') + ');');
+						WriteLn(BGFile, '	lua_push' + TypeTable[I + 1] + '(s, ret.' + String(TDOMElement(Child).GetAttribute('Field')) + ');');
 						WriteLn(BGFile, '	lua_rawseti(s, -2, ' + IntToStr(J) + ');');
 						break;
 					end;
@@ -85,9 +85,9 @@ begin
 	Child := Config.DocumentElement.FirstChild;
 	while Assigned(Child) do
 	begin
-		if (Child.NodeName = 'Array') and (TDOMElement(Child).GetAttribute('Name') = TypeName) then
+		if (Child.NodeName = 'Array') and (String(TDOMElement(Child).GetAttribute('Name')) = TypeName) then
 		begin
-			Default := TDOMElement(Child).GetAttribute('Default');
+			Default := String(TDOMElement(Child).GetAttribute('Default'));
 			Indent := '';
 			if not(Default = '') then
 			begin
@@ -102,10 +102,10 @@ begin
 				I := 0;
 				while I < Length(TypeTable) do
 				begin
-					if TypeTable[I + 2] = Child.NodeName then
+					if TypeTable[I + 2] = String(Child.NodeName) then
 					begin
 						WriteLn(BGFile, Indent + '	lua_rawgeti(s, ' + IntToStr(ArgIndex) + ', ' + IntToStr(J) + ');');
-						WriteLn(BGFile, Indent + '	' + VarName + '.' + TDOMElement(Child).GetAttribute('Field') + ' = luaL_check' + TypeTable[I + 1] + '(s, -1);');
+						WriteLn(BGFile, Indent + '	' + VarName + '.' + String(TDOMElement(Child).GetAttribute('Field')) + ' = luaL_check' + TypeTable[I + 1] + '(s, -1);');
 						WriteLn(BGFile, Indent + '	lua_pop(s, 1);');
 						break;
 					end;
@@ -245,7 +245,7 @@ begin
 		Child := Config.DocumentElement.FirstChild;
 		while Assigned(Child) do
 		begin
-			if (Child.NodeName = 'Array') and (TDOMElement(Child).GetAttribute('Name') = Entry.Argument[I]) then
+			if (Child.NodeName = 'Array') and (String(TDOMElement(Child).GetAttribute('Name')) = Entry.Argument[I]) then
 			begin
 				IsArray := True;
 				break;
@@ -256,9 +256,9 @@ begin
 		Child := Config.DocumentElement.FirstChild;
 		while Assigned(Child) do
 		begin
-			if (Child.NodeName = 'Metatable') and (TDOMElement(Child).GetAttribute('C') = Entry.Argument[I]) then
+			if (Child.NodeName = 'Metatable') and (String(TDOMElement(Child).GetAttribute('C')) = Entry.Argument[I]) then
 			begin
-				LuaName := TDOMElement(Child).GetAttribute('Lua');
+				LuaName := String(TDOMElement(Child).GetAttribute('Lua'));
 				break;
 			end;
 			Child := Child.NextSibling;
@@ -301,9 +301,9 @@ begin
 		Child := Config.DocumentElement.FirstChild;
 		while Assigned(Child) do
 		begin
-			if (Child.NodeName = 'Metatable') and (TDOMElement(Child).GetAttribute('C') = Entry.ReturnType) then
+			if (Child.NodeName = 'Metatable') and (String(TDOMElement(Child).GetAttribute('C')) = Entry.ReturnType) then
 			begin
-				LuaName := TDOMElement(Child).GetAttribute('Lua');
+				LuaName := String(TDOMElement(Child).GetAttribute('Lua'));
 				break;
 			end;
 			Child := Child.NextSibling;
@@ -329,7 +329,7 @@ begin
 		Child := Config.DocumentElement.FirstChild;
 		while Assigned(Child) do
 		begin
-			if (Child.NodeName = 'Array') and (TDOMElement(Child).GetAttribute('Name') = Entry.Argument[I]) then
+			if (Child.NodeName = 'Array') and (String(TDOMElement(Child).GetAttribute('Name')) = Entry.Argument[I]) then
 			begin
 				IsArray := True;
 				break;
@@ -340,9 +340,9 @@ begin
 		Child := Config.DocumentElement.FirstChild;
 		while Assigned(Child) do
 		begin
-			if (Child.NodeName = 'Metatable') and (TDOMElement(Child).GetAttribute('C') = Entry.Argument[I]) then
+			if (Child.NodeName = 'Metatable') and (String(TDOMElement(Child).GetAttribute('C')) = Entry.Argument[I]) then
 			begin
-				LuaName := TDOMElement(Child).GetAttribute('Lua');
+				LuaName := String(TDOMElement(Child).GetAttribute('Lua'));
 				break;
 			end;
 			Child := Child.NextSibling;
@@ -382,9 +382,9 @@ begin
 		Child := Config.DocumentElement.FirstChild;
 		while Assigned(Child) do
 		begin
-			if (Child.NodeName = 'Metatable') and (TDOMElement(Child).GetAttribute('C') = Entry.Argument[I]) then
+			if (Child.NodeName = 'Metatable') and (String(TDOMElement(Child).GetAttribute('C')) = Entry.Argument[I]) then
 			begin
-				LuaName := TDOMElement(Child).GetAttribute('Lua');
+				LuaName := String(TDOMElement(Child).GetAttribute('Lua'));
 				break;
 			end;
 			Child := Child.NextSibling;
@@ -412,7 +412,7 @@ begin
 		Child := Config.DocumentElement.FirstChild;
 		while Assigned(Child) do
 		begin
-			if (Child.NodeName = 'Array') and (TDOMElement(Child).GetAttribute('Name') = Entry.ReturnType) then
+			if (Child.NodeName = 'Array') and (String(TDOMElement(Child).GetAttribute('Name')) = Entry.ReturnType) then
 			begin
 				IsArray := True;
 				BindgenReturnArray(Entry.ReturnType);
@@ -425,13 +425,13 @@ begin
 		Child := Config.DocumentElement.FirstChild;
 		while Assigned(Child) do
 		begin
-			if (Child.NodeName = 'Metatable') and (TDOMElement(Child).GetAttribute('C') = Entry.ReturnType) then
+			if (Child.NodeName = 'Metatable') and (String(TDOMElement(Child).GetAttribute('C')) = Entry.ReturnType) then
 			begin
-				if not(TDOMElement(Child).GetAttribute('Valid') = '') then
+				if not(String(TDOMElement(Child).GetAttribute('Valid')) = '') then
 				begin
-					WriteLn(BGFile, '	if(!(' + TDOMElement(Child).GetAttribute('Valid') + ')) return 0;');
+					WriteLn(BGFile, '	if(!(' + String(TDOMElement(Child).GetAttribute('Valid')) + ')) return 0;');
 				end;
-				LuaName := TDOMElement(Child).GetAttribute('Lua');
+				LuaName := String(TDOMElement(Child).GetAttribute('Lua'));
 				break;
 			end;
 			Child := Child.NextSibling;
@@ -471,12 +471,12 @@ var
 	Name : String;
 begin
 	BindgenWriteTemplate(Path, Node);
-	WriteLn(BGFile, 'void bindgen_' + TDOMElement(Node).GetAttribute('Lua') + '_init(' + LuaWrap + ' lua){');
-	WriteLn(BGFile, '	luaL_newmetatable(LUA(lua), "' + TDOMElement(Node).GetAttribute('Lua') + '");');
+	WriteLn(BGFile, 'void bindgen_' + String(TDOMElement(Node).GetAttribute('Lua')) + '_init(' + LuaWrap + ' lua){');
+	WriteLn(BGFile, '	luaL_newmetatable(LUA(lua), "' + String(TDOMElement(Node).GetAttribute('Lua')) + '");');
 	WriteLn(BGFile, '');
 	for I := 0 to (Length(Functions) - 1) do
 	begin
-		Name := 'bindgen_' + TDOMElement(Node).GetAttribute('Lua') + '_' + Functions[I].FunctionName;
+		Name := 'bindgen_' + String(TDOMElement(Node).GetAttribute('Lua')) + '_' + Functions[I].FunctionName;
 		WriteLn(BGFile, '	lua_pushstring(LUA(lua), "' + Functions[I].LuaName + '");');
 		WriteLn(BGFile, '	lua_pushcfunction(LUA(lua), ' + Name + ');');
 		WriteLn(BGFile, '	lua_settable(LUA(lua), -3);');
@@ -496,13 +496,13 @@ var
 	Name : String;
 begin
 	BindgenWriteTemplate(Path, Node);
-	WriteLn(BGFile, 'void bindgen_' + TDOMElement(Node).GetAttribute('Name') + '_init(' + LuaWrap + ' lua){');
-	WriteLn(BGFile, '	lua_pushstring(LUA(lua), "' + TDOMElement(Node).GetAttribute('Name') + '");');
+	WriteLn(BGFile, 'void bindgen_' + String(TDOMElement(Node).GetAttribute('Name')) + '_init(' + LuaWrap + ' lua){');
+	WriteLn(BGFile, '	lua_pushstring(LUA(lua), "' + String(TDOMElement(Node).GetAttribute('Name')) + '");');
 	WriteLn(BGFile, '	lua_newtable(LUA(lua));');
 	WriteLn(BGFile, '');
 	for I := 0 to (Length(Functions) - 1) do
 	begin
-		Name := 'bindgen_' + TDOMElement(Node).GetAttribute('Name') + '_' + Functions[I].FunctionName;
+		Name := 'bindgen_' + String(TDOMElement(Node).GetAttribute('Name')) + '_' + Functions[I].FunctionName;
 		WriteLn(BGFile, '	lua_pushstring(LUA(lua), "' + Functions[I].LuaName + '");');
 		WriteLn(BGFile, '	lua_pushcfunction(LUA(lua), ' + Name + ');');
 		WriteLn(BGFile, '	lua_settable(LUA(lua), -3);');
@@ -577,8 +577,8 @@ begin
 
 	for I := 0 to (Length(Functions) - 1) do
 	begin
-		BindgenGenerateFunction((TDOMElement(Node).GetAttribute('Lua') + TDOMElement(Node).GetAttribute('Name')) + '_' + Functions[I].FunctionName, Functions[I]);
-		WriteLn(TDOMElement(Node).GetAttribute('Lua') + TDOMElement(Node).GetAttribute('Name') + '.' + Functions[I].LuaName);
+		BindgenGenerateFunction((String(TDOMElement(Node).GetAttribute('Lua')) + String(TDOMElement(Node).GetAttribute('Name'))) + '_' + Functions[I].FunctionName, Functions[I]);
+		WriteLn(String(TDOMElement(Node).GetAttribute('Lua')) + String(TDOMElement(Node).GetAttribute('Name')) + '.' + Functions[I].LuaName);
 	end;
 end;
 
@@ -591,7 +591,7 @@ begin
 	begin
 		if Child.NodeName = 'Metatable' then
 		begin
-			BindgenWriteMetatable(OutputRoot + '/bindgen_' + TDOMElement(Child).GetAttribute('Lua') + '.c', Child);
+			BindgenWriteMetatable(OutputRoot + '/bindgen_' + String(TDOMElement(Child).GetAttribute('Lua')) + '.c', Child);
 		end;
 		Child := Child.NextSibling;
 	end;
@@ -601,7 +601,7 @@ begin
 	begin
 		if Child.NodeName = 'Group' then
 		begin
-			BindgenWriteGeneric(OutputRoot + '/bindgen_' + TDOMElement(Child).GetAttribute('Name') + '.c', Child);
+			BindgenWriteGeneric(OutputRoot + '/bindgen_' + String(TDOMElement(Child).GetAttribute('Name')) + '.c', Child);
 		end;
 		Child := Child.NextSibling;
 	end;
@@ -619,7 +619,7 @@ begin
 	begin
 		if Child.NodeName = 'Metatable' then
 		begin
-			WriteLn(BGFile, '	bindgen_' + TDOMElement(Child).GetAttribute('Lua') + '_init(lua);');
+			WriteLn(BGFile, '	bindgen_' + String(TDOMElement(Child).GetAttribute('Lua')) + '_init(lua);');
 		end;
 		Child := Child.NextSibling;
 	end;
@@ -632,7 +632,7 @@ begin
 	begin
 		if Child.NodeName = 'Group' then
 		begin
-			WriteLn(BGFile, '	bindgen_' + TDOMElement(Child).GetAttribute('Name') + '_init(lua);');
+			WriteLn(BGFile, '	bindgen_' + String(TDOMElement(Child).GetAttribute('Name')) + '_init(lua);');
 		end;
 		Child := Child.NextSibling;
 	end;
@@ -657,11 +657,11 @@ begin
 	begin
 		if Child.NodeName = 'Metatable' then
 		begin
-			WriteLn(BGFile, 'void bindgen_' + TDOMElement(Child).GetAttribute('Lua') + '_init(' + LuaWrap + ' lua);');
+			WriteLn(BGFile, 'void bindgen_' + String(TDOMElement(Child).GetAttribute('Lua')) + '_init(' + LuaWrap + ' lua);');
 		end
 		else if Child.NodeName = 'Group' then
 		begin
-			WriteLn(BGFile, 'void bindgen_' + TDOMElement(Child).GetAttribute('Name') + '_init(' + LuaWrap + ' lua);');
+			WriteLn(BGFile, 'void bindgen_' + String(TDOMElement(Child).GetAttribute('Name')) + '_init(' + LuaWrap + ' lua);');
 		end;
 		Child := Child.NextSibling;
 	end;

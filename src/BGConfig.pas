@@ -40,19 +40,19 @@ begin
 	begin
 		if Child.NodeName = 'Pre' then
 		begin
-			Pre := Child.TextContent;
+			Pre := String(Child.TextContent);
 		end
 		else if Child.NodeName = 'LuaRoot' then
 		begin
-			LuaRoot := Child.TextContent;
+			LuaRoot := String(Child.TextContent);
 		end
 		else if Child.NodeName = 'LuaWrap' then
 		begin
-			LuaWrap := Child.TextContent;
+			LuaWrap := String(Child.TextContent);
 		end
 		else if Child.NodeName = 'LuaState' then
 		begin
-			LuaState := Child.TextContent;
+			LuaState := String(Child.TextContent);
 		end
 		else
 		begin
