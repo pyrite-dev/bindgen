@@ -373,7 +373,7 @@ begin
 	Write(BGFile, '	');
 	if not(Entry.ReturnType = 'void') then
 	begin
-		Write(BGFile, 'ret = ');
+		Write(BGFile, 'ret = (' + Entry.ReturnType + ')');
 	end;
 	Write(BGFile, Entry.FunctionName + '(');
 	for I := 0 to (Length(Entry.Argument) - 1) do
