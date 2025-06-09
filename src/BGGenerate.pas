@@ -371,7 +371,7 @@ begin
 	end;
 	WriteLn(BGFile, '');
 	Write(BGFile, '	');
-	if not(Entry.ReturnType = 'void') then
+	if Entry.ReturnType = 'char*' then
 	begin
 		Write(BGFile, 'ret = (' + Entry.ReturnType + ')');
 	end;
