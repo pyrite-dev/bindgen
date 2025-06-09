@@ -371,9 +371,13 @@ begin
 	end;
 	WriteLn(BGFile, '');
 	Write(BGFile, '	');
-	if Entry.ReturnType = 'char*' then
+	if not(Entry.ReturnType = 'void') then
 	begin
-		Write(BGFile, 'ret = (' + Entry.ReturnType + ')');
+		Write(BGFile, 'ret = ');
+		if Entry.ReturnType = 'char*' then
+		begin
+			Write(BGFile, '(' + Entry.ReturnType + ')');
+		end;
 	end;
 	Write(BGFile, Entry.FunctionName + '(');
 	for I := 0 to (Length(Entry.Argument) - 1) do
